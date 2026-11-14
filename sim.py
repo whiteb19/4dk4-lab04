@@ -42,7 +42,6 @@ def sim():
         while not success: # retry until ack is successfully received
             ack = env.event()
             env.process(send(data_seq_num, ack)) # sends the packet
-            yield env.timeout(TRANS_TIME) # wait until the packet has fully left the sender, before starting the timeout countdown
             res = yield ack | env.timeout(TIMEOUT) # wait for the ack to be successfully returned or the timeout to elapse
 
             # if the ack with next seq number was returned, the packet was success
