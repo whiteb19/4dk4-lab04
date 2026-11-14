@@ -30,7 +30,7 @@ def send(seq_num, ack):
         # the receiver sends back an ACK. after PROP_TIME it reaches the sender
         print(f"{env.now}: Ack {ack_seq_num} sent")
         yield env.timeout(PROP_TIME)
-        if not (np.random.random() < PD): # ack successfully transmitted
+        if not (np.random.random() < PA): # ack successfully transmitted
             print(f"{env.now}: Ack {ack_seq_num} received")
             ack.succeed(ack_seq_num)
     
@@ -42,6 +42,7 @@ def sim():
         while not success: # retry until ack is successfully received
             ack = env.event()
             env.process(send(data_seq_num, ack)) # sends the packet
+            yield env.timeout(TRANS_TIME) # wait until the packet has fully left the sender, before starting the timeout countdown
             res = yield ack | env.timeout(TIMEOUT) # wait for the ack to be successfully returned or the timeout to elapse
 
             # if the ack with next seq number was returned, the packet was success
