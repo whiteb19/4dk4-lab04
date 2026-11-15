@@ -10,6 +10,8 @@ import sim
 
 
 TIMEOUT = sim.TIMEOUT
+STUDENT_ID_SEED = 400454641
+DEFAULT_EXPERIMENT_SEEDS = (STUDENT_ID_SEED, 12345, 67890)
 
 PROTOCOLS = (
     ("Stop-and-Wait", 1, 1, 2),
@@ -85,7 +87,7 @@ def run_validation(output_dir):
 
 def run_lab_experiments(
     output_dir,
-    seeds=(4404, 12345, 67890),
+    seeds=DEFAULT_EXPERIMENT_SEEDS,
     measurement_time_ms=10000,
     warmup_time_ms=1000,
 ):
@@ -182,19 +184,6 @@ def run_lab_experiments(
     for ws, wr in ((1, 1),) + tuple((16, wr) for wr in (1,) + sr_receive_windows):
         for pd in (0, 0.1, 0.2, 0.3, 0.5):
             run_case("efficiency_vs_pd", "continuous", None, ws, wr, pd, 0, TIMEOUT)
-
-    for sweep_ws in ws_values:
-        run_case(
-            "metrics_vs_ws_with_data_errors",
-            "continuous",
-            None,
-            1,
-            1,
-            0.2,
-            0,
-            TIMEOUT,
-            sweep_ws,
-        )
 
     for wr in (1,) + sr_receive_windows:
         for ws in (ws_values[1:] if wr == 1 else ws_values):
@@ -336,7 +325,7 @@ def main():
         "--seeds",
         type=int,
         nargs="+",
-        default=(4404, 12345, 67890),
+        default=DEFAULT_EXPERIMENT_SEEDS,
         help="Random seeds reused for each experiment configuration.",
     )
     parser.add_argument(
