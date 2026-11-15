@@ -19,4 +19,4 @@ WS = 3 # send window size
 WR = 1 # receive window size
 M = 4 # sequence limit (modM), ex M=4 sequence numbers will be 0,1,2,3. M = 2**m, where m = # of sequence bits, Rule: Wmax = M-1
 
-RUN_TIME = 5
+RUN_TIME = 5 # default finite-transfer packet count (legacy parameter name)
