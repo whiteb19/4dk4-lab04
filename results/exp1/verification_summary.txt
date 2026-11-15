@@ -1,0 +1,28 @@
+Automated trace checks
+======================
+Stop-and-Wait     pd=0    pa=0   : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Stop-and-Wait     pd=0.5  pa=0.5 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Stop-and-Wait     pd=0.2  pa=0.0 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Stop-and-Wait     pd=0.0  pa=0.2 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Go-Back-N         pd=0    pa=0   : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Go-Back-N         pd=0.5  pa=0.5 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Go-Back-N         pd=0.2  pa=0.0 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Go-Back-N         pd=0.0  pa=0.2 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Selective-Repeat  pd=0    pa=0   : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Selective-Repeat  pd=0.5  pa=0.5 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Selective-Repeat  pd=0.2  pa=0.0 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+Selective-Repeat  pd=0.0  pa=0.2 : 300/300 runs delivered all 50 packets exactly once, in order, with correct timing
+
+Efficiency vs analysis
+======================
+protocol           pd   pa    simulated (mean ± sd, 3 seeds)  analysis
+S&W (Ws=Wr=1)       0    0                  0.0909 ± 0.0000    0.0909
+GBN (Ws=32)         0    0                  1.0000 ± 0.0000    1.0000
+SR (Ws=Wr=128)      0    0                  1.0000 ± 0.0000    1.0000
+S&W (Ws=Wr=1)     0.1    0                  0.0786 ± 0.0004    0.0789
+GBN (Ws=32)       0.1    0                  0.3742 ± 0.0091    0.3750
+SR (Ws=Wr=128)    0.1    0                  0.8969 ± 0.0016    0.9000
+S&W (Ws=Wr=1)     0.5    0                  0.0389 ± 0.0001    0.0385
+GBN (Ws=32)       0.5    0                  0.0629 ± 0.0009    0.0625
+SR (Ws=Wr=128)    0.5    0                  0.4848 ± 0.0023    0.5000
+S&W (Ws=Wr=1)     0.5  0.5                  0.0178 ± 0.0004    0.0179

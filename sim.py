@@ -97,6 +97,10 @@ class ARQSimulation:
         self.sender_packets = {}
         self.window_changed = self.env.event()
         self.timeout_event = None
+        # GBN/S&W: start time of the most recent transmission of each
+        # unacknowledged packet; the timer for the window base expires
+        # TIMEOUT after that packet's transmission began.
+        self.gbn_send_time = {}
         self.data_attempts_by_packet = {}
         self.ack_attempts_by_packet = {}
         self.delivered_packets = []
@@ -184,13 +188,10 @@ class ARQSimulation:
 
             acknowledged_idx = self.window_base + advance - 1
             self.record_event("ack_accepted", acknowledged_idx, seq_num)
+            for packet_idx in range(self.window_base, self.window_base + advance):
+                self.gbn_send_time.pop(packet_idx, None)
             self.window_base += advance
             self.log(f"Window base advanced to {self.window_base}")
-            self.timeout_event = (
-                self.env.timeout(self.config.timeout_ms)
-                if self.window_base < self.next_packet_idx
-                else None
-            )
         else:
             offset = (
                 seq_num - self.packet_idx_to_seq_num(self.window_base)
@@ -307,30 +308,88 @@ class ARQSimulation:
                 if state["ack_event"] in result:
                     return
 
+    def gbn_sender(self):
+        """Go-Back-N sender (also Stop-and-Wait when WS = 1).
+
+        A single send pointer walks through the window one transmission at a
+        time. The retransmission timer always refers to the window base and
+        expires TIMEOUT after the base packet's most recent transmission
+        started. On expiry the send pointer goes back to the base, so every
+        outstanding packet is resent in order. The timer is checked after
+        every transmission, so a go-back can also interrupt an earlier
+        go-back burst. A transmission already in progress is never aborted.
+        """
+        send_ptr = 0
+        while True:
+            if self.mode == "finite" and self.window_base >= self.packet_count:
+                return
+            # Cumulative ACKs may have overtaken the send pointer.
+            send_ptr = max(send_ptr, self.window_base)
+
+            # The timer only runs once the base has actually been (re)sent; right
+            # after a go-back, send_ptr == window_base and the base is resent next.
+            outstanding = self.window_base < send_ptr
+            deadline = (
+                self.gbn_send_time[self.window_base] + self.config.timeout_ms
+                if outstanding
+                else None
+            )
+            if deadline is not None and self.env.now >= deadline:
+                for packet_idx in range(self.window_base, self.next_packet_idx):
+                    self.record_event(
+                        "timeout", packet_idx, self.packet_idx_to_seq_num(packet_idx)
+                    )
+                self.log(
+                    "Timeout, going back to packet "
+                    f"{self.packet_idx_to_seq_num(self.window_base)}"
+                )
+                send_ptr = self.window_base
+                continue
+
+            can_send = send_ptr < self.window_base + self.config.ws and (
+                self.mode == "continuous" or send_ptr < self.packet_count
+            )
+            if can_send:
+                packet_idx = send_ptr
+                send_ptr += 1
+                self.next_packet_idx = max(self.next_packet_idx, send_ptr)
+                self.gbn_send_time[packet_idx] = self.env.now
+                self.env.process(self.send(packet_idx))
+                yield self.env.timeout(self.config.transmission_ms)
+                continue
+
+            # Window full (or nothing left to send): wait for an ACK that
+            # advances the base, or for the base packet's timer to expire.
+            if deadline is None:
+                yield self.window_changed
+            else:
+                yield self.window_changed | self.env.timeout(deadline - self.env.now)
+            if self.window_changed.triggered:
+                self.window_changed = self.env.event()
+
     def sim(self):
+        if self.config.wr == 1:
+            yield from self.gbn_sender()
+            return
+
         while True:
             while (
                 (self.mode == "continuous" or self.next_packet_idx < self.packet_count)
                 and self.next_packet_idx - self.window_base < self.config.ws
             ):
                 packet_idx = self.next_packet_idx
-                if self.config.wr == 1:
-                    if packet_idx == self.window_base:
-                        self.timeout_event = self.env.timeout(self.config.timeout_ms)
-                    self.env.process(self.send(packet_idx))
-                else:
-                    self.sender_packets[packet_idx] = {
-                        "acked": False,
-                        "ack_event": self.env.event(),
-                        "started_event": self.env.event(),
-                    }
-                    self.env.process(self.packet_timer(packet_idx))
-                    self.env.process(
-                        self.send(
-                            packet_idx,
-                            self.sender_packets[packet_idx]["started_event"],
-                        )
+                self.sender_packets[packet_idx] = {
+                    "acked": False,
+                    "ack_event": self.env.event(),
+                    "started_event": self.env.event(),
+                }
+                self.env.process(self.packet_timer(packet_idx))
+                self.env.process(
+                    self.send(
+                        packet_idx,
+                        self.sender_packets[packet_idx]["started_event"],
                     )
+                )
 
                 self.next_packet_idx += 1
                 yield self.env.timeout(self.config.transmission_ms)
@@ -338,32 +397,8 @@ class ARQSimulation:
             if self.mode == "finite" and self.window_base >= self.packet_count:
                 return
 
-            if self.config.wr == 1:
-                active_timeout = self.timeout_event
-                if active_timeout is None:
-                    yield self.window_changed
-                    self.window_changed = self.env.event()
-                    continue
-                result = yield self.window_changed | active_timeout
-                timed_out = (
-                    active_timeout in result and active_timeout is self.timeout_event
-                )
-                self.window_changed = self.env.event()
-                if timed_out and self.window_base < self.next_packet_idx:
-                    for packet_idx in range(self.window_base, self.next_packet_idx):
-                        seq_num = self.packet_idx_to_seq_num(packet_idx)
-                        self.record_event("timeout", packet_idx, seq_num)
-                    self.log(
-                        "Timeout, retransmitting packets "
-                        f"{range(self.window_base, self.next_packet_idx)}"
-                    )
-                    self.timeout_event = self.env.timeout(self.config.timeout_ms)
-                    for packet_idx in range(self.window_base, self.next_packet_idx):
-                        self.env.process(self.send(packet_idx))
-                        yield self.env.timeout(self.config.transmission_ms)
-            else:
-                yield self.window_changed
-                self.window_changed = self.env.event()
+            yield self.window_changed
+            self.window_changed = self.env.event()
 
     def make_result(self):
         if self.mode == "finite":

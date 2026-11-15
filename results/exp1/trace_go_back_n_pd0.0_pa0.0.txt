@@ -1,0 +1,42 @@
+Go-Back-N: Ws=4, Wr=1, M=8, pd=0.0, pa=0.0, N=6 packets, seed=400454641
+Ttx=1.0 ms, one-way propagation=5 ms, timeout=15 ms
+
+    0.0 ms  SENDER   transmit data     pkt 0  seq 0
+    1.0 ms  SENDER   transmit data     pkt 1  seq 1
+    2.0 ms  SENDER   transmit data     pkt 2  seq 2
+    3.0 ms  SENDER   transmit data     pkt 3  seq 3
+    6.0 ms  RECEIVER data arrives      pkt 0  seq 0
+    6.0 ms  RECEIVER deliver to upper layer  pkt 0  seq 0
+    6.0 ms  RECEIVER send ACK         ACK seq 1 (next expected)
+    7.0 ms  RECEIVER data arrives      pkt 1  seq 1
+    7.0 ms  RECEIVER deliver to upper layer  pkt 1  seq 1
+    7.0 ms  RECEIVER send ACK         ACK seq 2 (next expected)
+    8.0 ms  RECEIVER data arrives      pkt 2  seq 2
+    8.0 ms  RECEIVER deliver to upper layer  pkt 2  seq 2
+    8.0 ms  RECEIVER send ACK         ACK seq 3 (next expected)
+    9.0 ms  RECEIVER data arrives      pkt 3  seq 3
+    9.0 ms  RECEIVER deliver to upper layer  pkt 3  seq 3
+    9.0 ms  RECEIVER send ACK         ACK seq 4 (next expected)
+   11.0 ms  SENDER   ACK arrives       ACK seq 1 (next expected)
+   11.0 ms  SENDER   ACK accepted -> window advances  ACK seq 1 (next expected)
+   11.0 ms  SENDER   transmit data     pkt 4  seq 4
+   12.0 ms  SENDER   ACK arrives       ACK seq 2 (next expected)
+   12.0 ms  SENDER   ACK accepted -> window advances  ACK seq 2 (next expected)
+   12.0 ms  SENDER   transmit data     pkt 5  seq 5
+   13.0 ms  SENDER   ACK arrives       ACK seq 3 (next expected)
+   13.0 ms  SENDER   ACK accepted -> window advances  ACK seq 3 (next expected)
+   14.0 ms  SENDER   ACK arrives       ACK seq 4 (next expected)
+   14.0 ms  SENDER   ACK accepted -> window advances  ACK seq 4 (next expected)
+   17.0 ms  RECEIVER data arrives      pkt 4  seq 4
+   17.0 ms  RECEIVER deliver to upper layer  pkt 4  seq 4
+   17.0 ms  RECEIVER send ACK         ACK seq 5 (next expected)
+   18.0 ms  RECEIVER data arrives      pkt 5  seq 5
+   18.0 ms  RECEIVER deliver to upper layer  pkt 5  seq 5
+   18.0 ms  RECEIVER send ACK         ACK seq 6 (next expected)
+   22.0 ms  SENDER   ACK arrives       ACK seq 5 (next expected)
+   22.0 ms  SENDER   ACK accepted -> window advances  ACK seq 5 (next expected)
+   23.0 ms  SENDER   ACK arrives       ACK seq 6 (next expected)
+   23.0 ms  SENDER   ACK accepted -> window advances  ACK seq 6 (next expected)
+
+Delivered (in order): [0, 1, 2, 3, 4, 5]
+Data transmissions: 6, completion time: 23.0 ms

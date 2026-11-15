@@ -1,0 +1,130 @@
+Selective-Repeat: Ws=4, Wr=4, M=8, pd=0.5, pa=0.5, N=6 packets, seed=400454641
+Ttx=1.0 ms, one-way propagation=5 ms, timeout=15 ms
+
+    0.0 ms  SENDER   transmit data     pkt 0  seq 0
+    1.0 ms  SENDER   transmit data     pkt 1  seq 1
+    2.0 ms  SENDER   transmit data     pkt 2  seq 2
+    3.0 ms  SENDER   transmit data     pkt 3  seq 3
+    6.0 ms  CHANNEL  data LOST         pkt 0  seq 0
+    7.0 ms  RECEIVER data arrives      pkt 1  seq 1
+    7.0 ms  RECEIVER buffer (out of order)  pkt 1  seq 1
+    7.0 ms  RECEIVER send ACK         ACK seq 1 (acknowledges)
+    8.0 ms  RECEIVER data arrives      pkt 2  seq 2
+    8.0 ms  RECEIVER buffer (out of order)  pkt 2  seq 2
+    8.0 ms  RECEIVER send ACK         ACK seq 2 (acknowledges)
+    9.0 ms  RECEIVER data arrives      pkt 3  seq 3
+    9.0 ms  RECEIVER buffer (out of order)  pkt 3  seq 3
+    9.0 ms  RECEIVER send ACK         ACK seq 3 (acknowledges)
+   12.0 ms  SENDER   ACK arrives       ACK seq 1 (acknowledges)
+   12.0 ms  SENDER   ACK accepted -> window advances  ACK seq 1 (acknowledges)
+   13.0 ms  SENDER   ACK arrives       ACK seq 2 (acknowledges)
+   13.0 ms  SENDER   ACK accepted -> window advances  ACK seq 2 (acknowledges)
+   14.0 ms  CHANNEL  ACK LOST          ACK seq 3 (acknowledges)
+   15.0 ms  SENDER   TIMEOUT           pkt 0  seq 0
+   15.0 ms  SENDER   transmit data     pkt 0  seq 0  [RETRANSMISSION, attempt 2]
+   18.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+   18.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 2]
+   21.0 ms  RECEIVER data arrives      pkt 0  seq 0
+   21.0 ms  RECEIVER deliver to upper layer  pkt 0  seq 0
+   21.0 ms  RECEIVER deliver to upper layer  pkt 1  seq 1
+   21.0 ms  RECEIVER deliver to upper layer  pkt 2  seq 2
+   21.0 ms  RECEIVER deliver to upper layer  pkt 3  seq 3
+   21.0 ms  RECEIVER send ACK         ACK seq 0 (acknowledges)
+   24.0 ms  RECEIVER data arrives      pkt 3  seq 3
+   24.0 ms  RECEIVER send ACK         ACK seq 3 (acknowledges)
+   26.0 ms  SENDER   ACK arrives       ACK seq 0 (acknowledges)
+   26.0 ms  SENDER   ACK accepted -> window advances  ACK seq 0 (acknowledges)
+   26.0 ms  SENDER   transmit data     pkt 4  seq 4
+   27.0 ms  SENDER   transmit data     pkt 5  seq 5
+   29.0 ms  CHANNEL  ACK LOST          ACK seq 3 (acknowledges)
+   32.0 ms  RECEIVER data arrives      pkt 4  seq 4
+   32.0 ms  RECEIVER deliver to upper layer  pkt 4  seq 4
+   32.0 ms  RECEIVER send ACK         ACK seq 4 (acknowledges)
+   33.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+   33.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+   33.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 3]
+   37.0 ms  CHANNEL  ACK LOST          ACK seq 4 (acknowledges)
+   39.0 ms  CHANNEL  data LOST         pkt 3  seq 3
+   41.0 ms  SENDER   TIMEOUT           pkt 4  seq 4
+   41.0 ms  SENDER   transmit data     pkt 4  seq 4  [RETRANSMISSION, attempt 2]
+   42.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+   42.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 2]
+   47.0 ms  CHANNEL  data LOST         pkt 4  seq 4
+   48.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+   48.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+   48.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 4]
+   54.0 ms  CHANNEL  data LOST         pkt 3  seq 3
+   56.0 ms  SENDER   TIMEOUT           pkt 4  seq 4
+   56.0 ms  SENDER   transmit data     pkt 4  seq 4  [RETRANSMISSION, attempt 3]
+   57.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+   57.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 3]
+   62.0 ms  RECEIVER data arrives      pkt 4  seq 4
+   62.0 ms  RECEIVER send ACK         ACK seq 4 (acknowledges)
+   63.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+   63.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+   63.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 5]
+   67.0 ms  SENDER   ACK arrives       ACK seq 4 (acknowledges)
+   67.0 ms  SENDER   ACK accepted -> window advances  ACK seq 4 (acknowledges)
+   69.0 ms  CHANNEL  data LOST         pkt 3  seq 3
+   72.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+   72.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 4]
+   78.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+   78.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+   78.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 6]
+   84.0 ms  CHANNEL  data LOST         pkt 3  seq 3
+   87.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+   87.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 5]
+   93.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+   93.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+   93.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 7]
+   99.0 ms  RECEIVER data arrives      pkt 3  seq 3
+   99.0 ms  RECEIVER send ACK         ACK seq 3 (acknowledges)
+  102.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  102.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 6]
+  104.0 ms  CHANNEL  ACK LOST          ACK seq 3 (acknowledges)
+  108.0 ms  RECEIVER data arrives      pkt 5  seq 5
+  108.0 ms  RECEIVER deliver to upper layer  pkt 5  seq 5
+  108.0 ms  RECEIVER send ACK         ACK seq 5 (acknowledges)
+  108.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+  108.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 8]
+  113.0 ms  CHANNEL  ACK LOST          ACK seq 5 (acknowledges)
+  114.0 ms  CHANNEL  data LOST         pkt 3  seq 3
+  117.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  117.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 7]
+  123.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  123.0 ms  SENDER   TIMEOUT           pkt 3  seq 3
+  123.0 ms  SENDER   transmit data     pkt 3  seq 3  [RETRANSMISSION, attempt 9]
+  129.0 ms  RECEIVER data arrives      pkt 3  seq 3
+  129.0 ms  RECEIVER send ACK         ACK seq 3 (acknowledges)
+  132.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  132.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 8]
+  134.0 ms  SENDER   ACK arrives       ACK seq 3 (acknowledges)
+  134.0 ms  SENDER   ACK accepted -> window advances  ACK seq 3 (acknowledges)
+  138.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  147.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  147.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 9]
+  153.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  162.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  162.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 10]
+  168.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  177.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  177.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 11]
+  183.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  192.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  192.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 12]
+  198.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  207.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  207.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 13]
+  213.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  222.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  222.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 14]
+  228.0 ms  CHANNEL  data LOST         pkt 5  seq 5
+  237.0 ms  SENDER   TIMEOUT           pkt 5  seq 5
+  237.0 ms  SENDER   transmit data     pkt 5  seq 5  [RETRANSMISSION, attempt 15]
+  243.0 ms  RECEIVER data arrives      pkt 5  seq 5
+  243.0 ms  RECEIVER send ACK         ACK seq 5 (acknowledges)
+  248.0 ms  SENDER   ACK arrives       ACK seq 5 (acknowledges)
+  248.0 ms  SENDER   ACK accepted -> window advances  ACK seq 5 (acknowledges)
+
+Delivered (in order): [0, 1, 2, 3, 4, 5]
+Data transmissions: 31, completion time: 248.0 ms
