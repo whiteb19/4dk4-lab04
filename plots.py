@@ -50,7 +50,7 @@ def plot(rows, x, y, label, xlabel, ylabel, title, fname, theory=None, logx=Fals
             ax.axhline(pts[0][1], color="gray", ls=":", label="S&W (reference)")
             continue
         xs, ms, sds = zip(*pts)
-        ax.errorbar(xs, ms, yerr=sds, fmt=MARKERS[i % len(MARKERS)], ms=5, capsize=2, label=lab)
+        ax.plot(xs, ms, marker=MARKERS[i % len(MARKERS)], linestyle="-", ms=5, label=lab)
     for lab, (tx, ty) in (theory or {}).items():
         ax.plot(tx, ty, "--", lw=1, label=lab)
     if logx:
